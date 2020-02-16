@@ -1,0 +1,216 @@
+
+   
+
+<?php  
+
+
+include("Telegram.php");
+
+// Set the bot TOKEN
+$bot_id ="414208820:AAEtzqCxgLNlhg-m1YbCKsblz4fw6H0yXcQ";
+// Instances the class
+$telegram = new Telegram($bot_id);
+
+// Take text and other data from the message
+
+$text 			  = $telegram->Text();
+$callback_data    = $telegram->Callback_Data();
+$callback_query   = $telegram->Callback_Query();
+$callback_chat_id = $telegram->Callback_ChatID();
+$chat_id         = $telegram->ChatID();
+
+
+
+if(!is_null($text) && !is_null($chat_id)){
+	
+	if($text=='/start'){ 
+ //ساخت دکمه شیشه ای لینکدار
+    $option = array( 
+
+    //First row
+array($telegram->buildInlineKeyboardButton("دریافت اپلیکیشن سیستم هوشمند آبیاری","","recieveapp","")),
+
+    //Second row 
+ array(
+ 
+  $telegram->buildInlineKeyBoardButton("دریافت آموزش","","sendeducationchoose",""), $telegram->buildInlineKeyBoardButton("ارتباط باما","","contactus","")
+  ) 
+    );
+$keyb = $telegram->buildInlineKeyBoard($option);
+$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "سلام
+ممنون از انتخاب ویستو 
+برای ادامه کار یکی از گزینه های زیر را انتخاب نماییده ای");
+$telegram->sendMessage($content);
+}
+}
+
+  if ($callback_query !== null && $callback_query != ""){
+      
+ switch ($callback_data) {
+     
+     //for send education
+		case 'sendeducationchoose':
+				 $option = array( 
+
+                    //First row
+                
+                    //Second row 
+                 array(
+                 
+                  $telegram->buildInlineKeyBoardButton(" دریافت آموزش تصویری","","sendeducation",""), $telegram->buildInlineKeyBoardButton("دریافت فیلم آموزش","","sendeducationfilm","")
+                  ),
+                    //Third row
+                  
+                    );
+                $keyb = $telegram->buildInlineKeyBoard($option);
+                $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "یکی از گزینه های زیر را انتخاب نمایید");
+                $telegram->sendMessage($content);
+
+			break;
+			
+        case 'sendeducationfilm':
+                    				$video='https://visto.ir/wp-content/video_2019-12-07_01-35-42.mp4';
+            
+                        $content = array('chat_id' => $chat_id, 'caption' => 'caption for video', 'video'=>$video);
+                        
+                        $telegram->sendVideo($content);
+                        
+                         $option = array( 
+                        
+                            //First row
+                        array($telegram->buildInlineKeyboardButton("ادامه کار","","endeducation","")),            
+                        );
+                        $keyb = $telegram->buildInlineKeyBoard($option);
+                        $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "فیلم را بدقت ببینید و مراحل را بترتیب انجام دهید");
+                        $telegram->sendMessage($content);
+
+        			break;
+
+        case 'endeducation' :
+                            //ساخت دکمه شیشه ای لینکدار
+                        $option = array( 
+                    
+                        //First row
+                    array($telegram->buildInlineKeyboardButton("دریافت اپلیکیشن سیستم هوشمند آبیاری","","recieveapp","")),
+                    
+                        //Second row 
+                     array(
+                     
+                      $telegram->buildInlineKeyBoardButton("دریافت آموزش","","sendeducationchoose",""), $telegram->buildInlineKeyBoardButton("ارتباط باما","","contactus","")
+                      ) 
+                        );
+                    $keyb = $telegram->buildInlineKeyBoard($option);
+                    					$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "یکی از موارد زیر را برای ادامه انتخاب نمایید");
+                    $telegram->sendMessage($content);
+                    	break;	
+                    
+        case 'recieveappfromtelegram':
+					$document='https://t.me/elecdelta/2607';
+                    //https://dl2.androidtime.co/uploads/app/Mellat-Bank-1.2.0(www.Androidtime.co).apk
+                    $content = array('chat_id' => $chat_id,'document'=>$document);
+                    
+                    $telegram->sendDocument($content);
+		    		break;
+		    
+		case 'recieveapp':
+		   
+					$option = array( 
+                    
+                        //First row
+                    array($telegram->buildInlineKeyboardButton("دریافت از بازار", $url="https://cafebazaar.ir/app/com.visto.Visto")),
+                    
+                        //Second row 
+                     array(
+                     
+                      $telegram->buildInlineKeyBoardButton("دریافت از تلگرام","","recieveappfromtelegram","")
+                      ) 
+                        );
+                    $keyb = $telegram->buildInlineKeyBoard($option);
+                    $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "روش دریافت را انتخاب نمایید");
+                    $telegram->sendMessage($content);
+		    	break;
+		case 'sendeducation':
+						$photo ='https://t.me/HowCreateBot/367';
+            
+                        $content = array('chat_id' => $chat_id, 'caption' => 'caption for picture', 'photo'=>$photo);
+                        
+                        $telegram->sendPhoto($content);
+                        
+                         //ساخت دکمه شیشه ای لینکدار
+                            $option = array( 
+                        
+                            //First row
+                        array($telegram->buildInlineKeyboardButton("دریافت ادامه آموزش","","Nexteducation","")),             
+                        );
+                        $keyb = $telegram->buildInlineKeyBoard($option);
+                        $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "اگر این مرحله را بدرستی انجام دادین برای دیدن ادامه آموزش را ببینید");
+                        $telegram->sendMessage($content);
+                        
+			break;
+
+		case 'Nexteducation':
+                					$document='https://t.me/elecdelta/2607';
+                //https://dl2.androidtime.co/uploads/app/Mellat-Bank-1.2.0(www.Androidtime.co).apk
+                $content = array('chat_id' => $chat_id,'document'=>$document);
+                
+                $telegram->sendDocument($content);
+                
+                $option = array( 
+    
+                 //First row
+                array($telegram->buildInlineKeyboardButton("دریافت ادامه آموزش","","Nexteducation1","")),             
+                );
+                $keyb = $telegram->buildInlineKeyBoard($option);
+                $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "اگر این مرحله را بدرستی انجام دادین برای دیدن ادامه آموزش را ببینید");
+                $telegram->sendMessage($content);
+			break;
+          
+          case 'Nexteducation1':
+                	$document='https://t.me/elecdelta/2607';
+                    //https://dl2.androidtime.co/uploads/app/Mellat-Bank-1.2.0(www.Androidtime.co).apk
+                    $content = array('chat_id' => $chat_id,'document'=>$document);
+                    
+                    $telegram->sendDocument($content);
+                    
+                    $option = array( 
+        
+                     //First row
+                    array($telegram->buildInlineKeyboardButton("تمام مراحل به پایان رسید","","endeducation","")),     
+                    );
+                    $keyb = $telegram->buildInlineKeyBoard($option);
+                    $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "اگر این مرحله را بدرستی انجام دادین برای دیدن ادامه آموزش را ببینید");
+                    $telegram->sendMessage($content);
+        		
+                  
+            
+            break;
+        
+        
+        case 'contactus':
+    			 $option = array( 
+    
+                     //First row
+                 array(
+                 $telegram->buildInlineKeyBoardButton("رفتن به کانال تلگرام", $url="https://t.me/vistogroup"), $telegram->buildInlineKeyBoardButton(" ارتباط با بخش فنی در تلگرام", $url="https://t.me/kamrankamranifard")
+                 ),  
+                
+                     //Second row 
+                  array(
+                  $telegram->buildInlineKeyBoardButton("ارتباط با بخش فنی در واتس آپ", $url="https://wa.me/+989129638675"), $telegram->buildInlineKeyBoardButton("رفتن به سایت", $url="https://visto.ir/")
+                  ),
+                     
+                     );
+                 $keyb = $telegram->buildInlineKeyBoard($option);
+                 $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "
+                 لطفا یکی ز راه های ارتباطی را انتخاب نمایید");
+                 $telegram->sendMessage($content);
+
+			break;
+		default:
+			$content = array('chat_id' => $chat_id, 'text' => 'u send others type of messages :)');
+			$telegram->sendMessage($content);
+	}
+  }
+
+
+?>
